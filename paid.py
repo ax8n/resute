@@ -5,7 +5,7 @@ from io import StringIO
 
 def vu(ID, token):
     try:
-        url = "https://raw.githubusercontent.com/ax8n/aniipy/main/access.csv"
+        url = "https://raw.githubusercontent.com/ax8n/resute/refs/heads/main/access.csv"
         response = requests.get(url)
         response.raise_for_status()
         csv_data = StringIO(response.text)
