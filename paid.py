@@ -3,7 +3,7 @@ import requests
 from datetime import datetime
 from io import StringIO
 
-def check_paid_access(user_id, token):
+def vu(ID, token):
     try:
         url = "https://raw.githubusercontent.com/ax8n/aniipy/main/access.csv"
         response = requests.get(url)
@@ -12,15 +12,16 @@ def check_paid_access(user_id, token):
         reader = csv.DictReader(csv_data)
 
         for row in reader:
-            if row["user_id"] == str(user_id) and row["token"] == token:
-                expire = datetime.strptime(row["expire_date"], "%Y-%m-%d")
+            if row["user_id"] == str(ID) and row["token"] == token:
+                expire = datetime.strptime(row["expire_date"], "%Y-%m-%d %H:%M:%S")
                 if datetime.now() <= expire:
                     return True
                 else:
-                    print("✖ Access expired.")
+                    print("\n✖ Access expired!")
+                    print("To renew or buy access, contact: @aniipy\n")
                     return False
-        print("✖ Invalid token or ID.")
+        print("✖ Invalid token or user ID.")
         return False
     except Exception as e:
-        print(f"✖ Error: {e}")
+        print(f"✖ Error checking access: {e}")
         return False
