@@ -17,8 +17,8 @@ def vu(ID, token):
                 if datetime.now() <= expire:
                     return True
                 else:
-                    print("\n✖ Access expired!")
-                    print("To renew or buy access, contact: @aniipy\n")
+                    print("✖ Access expired!")
+                    print("To renew or buy access, contact: @aniipy")
                     return False
         print("✖ Invalid token or user ID.")
         return False
