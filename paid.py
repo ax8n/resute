@@ -12,8 +12,9 @@ def vu(ID):
         reader = csv.DictReader(csv_data)
 
         for row in reader:
-            if row["user_id"] == str(ID):
-                expire = datetime.strptime(row["expire_date"], "%Y-%m-%d %H:%M:%S")
+            user_id = row["user_id"].strip().replace('\r', '').replace('\n', '')
+            if user_id == str(ID).strip():
+                expire = datetime.strptime(row["expire_date"].strip(), "%Y-%m-%d %H:%M:%S")
                 if datetime.now() <= expire:
                     return True
                 else:
@@ -22,6 +23,7 @@ def vu(ID):
                     return False
         print("✖ Invalid user ID.")
         return False
+
     except Exception as e:
-        print(f"✖ Error checking access")
+        print("✖ Error checking access")
         return False
