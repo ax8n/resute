@@ -3,8 +3,13 @@ import requests
 from datetime import datetime
 from io import StringIO
 
-def vu(ID):
+def vu(ID=None):
     try:
+        # ✅ Check if ID is None or empty
+        if ID is None or str(ID).strip() == "":
+            print("✖ Invalid user ID.")
+            return False
+
         url = "https://raw.githubusercontent.com/ax8n/resute/refs/heads/main/access.csv"
         response = requests.get(url)
         response.raise_for_status()
@@ -12,22 +17,24 @@ def vu(ID):
         csv_data = StringIO(response.text)
         reader = csv.DictReader(csv_data)
 
-        print("✅ CSV Loaded. Rows:")
         for row in reader:
-            print(row)  # 🔍 Print row for debugging
-
-            user_id = row["user_id"].strip().replace('\r', '').replace('\n', '')
+            user_id = row["user_id"].strip()
             if user_id == str(ID).strip():
-                expire = datetime.strptime(row["expire_date"].strip(), "%Y-%m-%d %H:%M:%S")
-                if datetime.now() <= expire:
-                    print("✅ Access valid.")
-                    return True
-                else:
-                    print("✖ Access expired!")
-                    print("To renew or buy access, contact: @aniipy")
-                    return False
+                raw_date = row["expire_date"].strip()
+                cleaned_date = " ".join(raw_date.split())
+                try:
+                    expire = datetime.strptime(cleaned_date, "%Y-%m-%d %H:%M:%S")
+                except ValueError:
+                    break  # Treat as expired if date is invalid
 
-        print("✖ Invalid user ID.")
+                if datetime.now() <= expire:
+                    return True  # ✅ Valid access — silent
+                else:
+                    break  # Expired — print below
+
+        # 🔴 Either ID not found or expired
+        print("✖ Access expired!")
+        print("To renew or buy access, contact: @aniipy")
         return False
 
     except Exception as e:
