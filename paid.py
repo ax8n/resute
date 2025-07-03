@@ -5,7 +5,6 @@ from io import StringIO
 
 def vu(ID=None):
     try:
-        # ✅ Check if ID is None or empty
         if ID is None or str(ID).strip() == "":
             print("✖ Invalid user ID.")
             return False
@@ -25,14 +24,13 @@ def vu(ID=None):
                 try:
                     expire = datetime.strptime(cleaned_date, "%Y-%m-%d %H:%M:%S")
                 except ValueError:
-                    break  # Treat as expired if date is invalid
+                    break  
 
                 if datetime.now() <= expire:
-                    return True  # ✅ Valid access — silent
+                    return True  
                 else:
-                    break  # Expired — print below
+                    break  
 
-        # 🔴 Either ID not found or expired
         print("✖ Access expired!")
         print("To renew or buy access, contact: @aniipy")
         return False
